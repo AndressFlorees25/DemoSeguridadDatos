@@ -51,6 +51,11 @@ class AlmacenSeguro(private val context: Context) {
         }
     }
 
+    /** Agrega una credencial escrita por el usuario (sin borrar las anteriores). */
+    fun agregarCredencial(c: Credencial) {
+        prefs.edit().putString("servicio_${c.servicio}", "${c.usuario}|${c.password}").apply()
+    }
+
     fun borrar() = prefs.edit().clear().apply()
 
     fun credenciales(): List<Credencial> =

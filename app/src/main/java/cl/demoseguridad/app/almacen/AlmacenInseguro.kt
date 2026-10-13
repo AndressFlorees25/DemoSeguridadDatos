@@ -43,6 +43,11 @@ class AlmacenInseguro(private val context: Context) {
         File(context.filesDir, ARCHIVO_TARJETAS).writeText(texto)
     }
 
+    /** Agrega una credencial escrita por el usuario (sin borrar las anteriores). */
+    fun agregarCredencial(c: Credencial) {
+        prefs.edit().putString("servicio_${c.servicio}", "${c.usuario}|${c.password}").apply()
+    }
+
     fun borrar() {
         prefs.edit().clear().apply()
         File(context.filesDir, ARCHIVO_TARJETAS).delete()

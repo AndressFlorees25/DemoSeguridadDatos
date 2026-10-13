@@ -16,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,6 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cl.demoseguridad.app.almacen.AlmacenInseguro
@@ -51,6 +55,11 @@ fun PantallaDemo() {
     var credenciales by remember { mutableStateOf<List<Credencial>>(emptyList()) }
     var tarjetas by remember { mutableStateOf<List<Tarjeta>>(emptyList()) }
     var volcado by remember { mutableStateOf("") }
+
+    // Formulario para que el usuario escriba sus propios datos.
+    var servicio by remember { mutableStateOf("") }
+    var usuario by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     fun refrescar() {
         credenciales = if (modo == Modo.INSEGURO) inseguro.credenciales() else seguro.credenciales()
@@ -125,6 +134,53 @@ fun PantallaDemo() {
                 },
                 Modifier.fillMaxWidth(),
             ) { Text("1 · Guardar datos de ejemplo") }
+
+            // Formulario para agregar datos propios
+            SeccionTitulo("Agregar tu propio dato")
+            OutlinedTextField(
+                value = servicio,
+                onValueChange = { servicio = it },
+                label = { Text("Servicio (ej: Instagram)") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = usuario,
+                onValueChange = { usuario = it },
+                label = { Text("Usuario / correo") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Button(
+                onClick = {
+                    if (servicio.isNotBlank() && password.isNotBlank()) {
+                        val c = Credencial(servicio.trim(), usuario.trim(), password)
+                        if (modo == Modo.INSEGURO) inseguro.agregarCredencial(c) else seguro.agregarCredencial(c)
+                        servicio = ""; usuario = ""; password = ""
+                        volcado = ""
+                        refrescar()
+                    }
+                },
+                Modifier.fillMaxWidth(),
+            ) { Text("Agregar credencial al modo actual") }
+
+            if (modo == Modo.INSEGURO) {
+                Text(
+                    "⚠️ En modo inseguro esto se guarda en texto plano. No uses una " +
+                        "contraseña real que te importe.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
 
             OutlinedButton(
                 onClick = {
