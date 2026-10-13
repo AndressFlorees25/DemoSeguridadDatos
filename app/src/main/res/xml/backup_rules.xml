@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Excluimos del respaldo los almacenes con datos sensibles. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="almacen_inseguro.xml" />
+    <exclude domain="sharedpref" path="almacen_seguro.xml" />
+    <exclude domain="file" path="tarjetas_inseguro.txt" />
+</full-backup-content>

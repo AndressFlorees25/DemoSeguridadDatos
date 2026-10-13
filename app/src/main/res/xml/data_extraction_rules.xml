@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="almacen_inseguro.xml" />
+        <exclude domain="sharedpref" path="almacen_seguro.xml" />
+        <exclude domain="file" path="tarjetas_inseguro.txt" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="almacen_inseguro.xml" />
+        <exclude domain="sharedpref" path="almacen_seguro.xml" />
+        <exclude domain="file" path="tarjetas_inseguro.txt" />
+    </device-transfer>
+</data-extraction-rules>
